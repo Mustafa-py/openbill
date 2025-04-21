@@ -3,6 +3,9 @@
 
     <menu id="application" title="msg://com.dstu.openbill/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.dstu.openbill.view.user/UserListView.title"/>
+        <item view="openbill_Apartment.list" title="msg://com.dstu.openbill.view.apartment/apartmentListView.title"/>
+        <item view="openbill_HousingAssociation.list"
+              title="msg://com.dstu.openbill.view.housingassociation/housingAssociationListView.title"/>
         <item view="openbill_House.list" title="msg://com.dstu.openbill.view.house/houseListView.title"/>
     </menu>
 

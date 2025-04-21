@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      title="msg://houseDetailView.title"
+      title="msg://apartmentDetailView.title"
       focusComponent="form">
     <data>
-        <instance id="houseDc"
-                  class="com.dstu.openbill.entity.House">
+        <instance id="apartmentDc"
+                  class="com.dstu.openbill.entity.Apartment">
             <fetchPlan extends="_base">
-                <property name="housingAssociation" fetchPlan="_base"/>
+                <property name="house" fetchPlan="_base"/>
             </fetchPlan>
-            <loader id="houseDl"/>
+            <loader id="apartmentDl"/>
         </instance>
     </data>
     <facets>
@@ -19,20 +19,21 @@
         <action id="closeAction" type="detail_close"/>
     </actions>
     <layout>
-        <formLayout id="form" dataContainer="houseDc">
+        <formLayout id="form" dataContainer="apartmentDc">
             <responsiveSteps>
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <textField id="addressField" property="address"/>
-            <textField id="totalAreaField" property="totalArea"/>
-            <textField id="yearBuiltField" property="yearBuilt"/>
-            <entityPicker id="housingAssociationField" property="housingAssociation">
+            <textField id="numberField" property="number"/>
+            <textField id="areaField" property="area"/>
+            <textField id="roomsField" property="rooms"/>
+            <entityPicker id="houseField" property="house">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
+            <textField id="ownerField" property="owner"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

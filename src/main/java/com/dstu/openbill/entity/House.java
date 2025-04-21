@@ -2,7 +2,6 @@ package com.dstu.openbill.entity;
 
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
-
 import java.util.UUID;
 
 @JmixEntity
@@ -21,6 +20,10 @@ public class House {
 
     @Column(name = "YEAR_BUILT")
     private Integer yearBuilt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HOUSING_ASSOCIATION_ID")
+    private HousingAssociation housingAssociation;
 
     // ======= Геттеры и сеттеры =======
 
@@ -54,5 +57,20 @@ public class House {
 
     public void setYearBuilt(Integer yearBuilt) {
         this.yearBuilt = yearBuilt;
+    }
+
+    public HousingAssociation getHousingAssociation() {
+        return housingAssociation;
+    }
+
+    public void setHousingAssociation(HousingAssociation housingAssociation) {
+        this.housingAssociation = housingAssociation;
+    }
+
+    // ======= toString для отображения =======
+
+    @Override
+    public String toString() {
+        return address;
     }
 }
