@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="openbill">
+        <createTable tableName="openbill_Balance">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OPENBILL_BALANCE"/>
+            </column>
+            <column name="OWNER_ID" type="UUID"/>
+            <column name="DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="openbill">
+        <createTable tableName="openbill_Owner">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OPENBILL_OWNER"/>
+            </column>
+            <column name="FULL_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="openbill">
+        <addColumn tableName="openbill_Apartment">
+            <column name="OWNER_ID" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="4" author="openbill">
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="openbill_Apartment"
+                                 constraintName="FK_OPENBILL_APARTMENT_ON_OWNER" referencedColumnNames="id"
+                                 referencedTableName="openbill_Owner"/>
+    </changeSet>
+    <changeSet id="5" author="openbill">
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="openbill_Balance"
+                                 constraintName="FK_OPENBILL_BALANCE_ON_OWNER" referencedColumnNames="id"
+                                 referencedTableName="openbill_Owner"/>
+    </changeSet>
+    <changeSet id="6" author="openbill">
+        <dropColumn columnName="OWNER" tableName="OPENBILL_APARTMENT"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://apartmentListView.title"
-      focusComponent="apartmentsDataGrid">
+      title="msg://ownerListView.title"
+      focusComponent="ownersDataGrid">
     <data>
-        <collection id="apartmentsDc"
-                    class="com.dstu.openbill.entity.Apartment">
+        <collection id="ownersDc"
+                    class="com.dstu.openbill.entity.Owner">
             <fetchPlan extends="_base">
-                <property name="house" fetchPlan="_base"/>
-                <property name="owner" fetchPlan="_base"/>
+                <property name="apartments" fetchPlan="_base"/>
+                <property name="balances" fetchPlan="_base"/>
             </fetchPlan>
-            <loader id="apartmentsDl" readOnly="true">
+            <loader id="ownersDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from openbill_Apartment e]]>
+                    <![CDATA[select e from openbill_Owner e]]>
                 </query>
             </loader>
         </collection>
@@ -30,19 +30,19 @@
     </actions>
     <layout>
         <genericFilter id="genericFilter"
-                       dataLoader="apartmentsDl">
+                       dataLoader="ownersDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="apartmentsDataGrid.create"/>
-            <button id="editButton" action="apartmentsDataGrid.edit"/>
-            <button id="removeButton" action="apartmentsDataGrid.remove"/>
-            <simplePagination id="pagination" dataLoader="apartmentsDl"/>
+            <button id="createButton" action="ownersDataGrid.create"/>
+            <button id="editButton" action="ownersDataGrid.edit"/>
+            <button id="removeButton" action="ownersDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="ownersDl"/>
         </hbox>
-        <dataGrid id="apartmentsDataGrid"
+        <dataGrid id="ownersDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="apartmentsDc"
+                  dataContainer="ownersDc"
                   columnReorderingAllowed="true">
             <actions>
                 <action id="create" type="list_create"/>
@@ -50,11 +50,8 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="number"/>
-                <column property="area"/>
-                <column property="rooms"/>
-                <column property="house"/>
-                <column property="owner"/>
+                <column property="fullName"/>
+                <column property="contacts"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

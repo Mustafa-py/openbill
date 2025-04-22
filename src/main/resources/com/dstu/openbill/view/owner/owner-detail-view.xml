@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://ownerDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="ownerDc"
+                  class="com.dstu.openbill.entity.Owner">
+            <fetchPlan extends="_base">
+                <property name="apartments" fetchPlan="_base"/>
+                <property name="balances" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="ownerDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="ownerDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="fullNameField" property="fullName"/>
+            <textField id="contactsField" property="contacts"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

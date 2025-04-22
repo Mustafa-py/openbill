@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://apartmentListView.title"
-      focusComponent="apartmentsDataGrid">
+      title="msg://balanceListView.title"
+      focusComponent="balancesDataGrid">
     <data>
-        <collection id="apartmentsDc"
-                    class="com.dstu.openbill.entity.Apartment">
+        <collection id="balancesDc"
+                    class="com.dstu.openbill.entity.Balance">
             <fetchPlan extends="_base">
-                <property name="house" fetchPlan="_base"/>
                 <property name="owner" fetchPlan="_base"/>
             </fetchPlan>
-            <loader id="apartmentsDl" readOnly="true">
+            <loader id="balancesDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from openbill_Apartment e]]>
+                    <![CDATA[select e from openbill_Balance e]]>
                 </query>
             </loader>
         </collection>
@@ -30,19 +29,19 @@
     </actions>
     <layout>
         <genericFilter id="genericFilter"
-                       dataLoader="apartmentsDl">
+                       dataLoader="balancesDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="apartmentsDataGrid.create"/>
-            <button id="editButton" action="apartmentsDataGrid.edit"/>
-            <button id="removeButton" action="apartmentsDataGrid.remove"/>
-            <simplePagination id="pagination" dataLoader="apartmentsDl"/>
+            <button id="createButton" action="balancesDataGrid.create"/>
+            <button id="editButton" action="balancesDataGrid.edit"/>
+            <button id="removeButton" action="balancesDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="balancesDl"/>
         </hbox>
-        <dataGrid id="apartmentsDataGrid"
+        <dataGrid id="balancesDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="apartmentsDc"
+                  dataContainer="balancesDc"
                   columnReorderingAllowed="true">
             <actions>
                 <action id="create" type="list_create"/>
@@ -50,11 +49,8 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="number"/>
-                <column property="area"/>
-                <column property="rooms"/>
-                <column property="house"/>
                 <column property="owner"/>
+                <column property="balance"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

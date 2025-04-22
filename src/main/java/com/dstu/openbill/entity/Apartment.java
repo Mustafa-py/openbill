@@ -26,10 +26,13 @@ public class Apartment {
     @JoinColumn(name = "HOUSE_ID")
     private House house;
 
-    @Column(name = "OWNER")
-    private String owner;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "OWNER_ID")
+    private Owner owner;
 
     // --- геттеры/сеттеры ---
+
+
     public UUID getId() {
         return id;
     }
@@ -70,11 +73,11 @@ public class Apartment {
         this.house = house;
     }
 
-    public String getOwner() {
+    public Owner getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(Owner owner) {
         this.owner = owner;
     }
 }
