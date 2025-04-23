@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://serviceListView.title"
+      focusComponent="servicesDataGrid">
+    <data>
+        <collection id="servicesDc"
+                    class="com.dstu.openbill.entity.Service">
+            <fetchPlan extends="_base"/>
+            <loader id="servicesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from openbill_Service e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="servicesDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createButton" action="servicesDataGrid.create"/>
+            <button id="editButton" action="servicesDataGrid.edit"/>
+            <button id="removeButton" action="servicesDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="servicesDl"/>
+        </hbox>
+        <dataGrid id="servicesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="servicesDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="name"/>
+                <column property="description"/>
+                <column property="startDate"/>
+                <column property="endDate"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

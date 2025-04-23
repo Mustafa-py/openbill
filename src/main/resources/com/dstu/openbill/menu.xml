@@ -9,6 +9,11 @@
         <item view="openbill_Apartment.list" title="msg://com.dstu.openbill.view.apartment/apartmentListView.title"/>
         <item view="openbill_Owner.list" title="msg://com.dstu.openbill.view.owner/ownerListView.title"/>
         <item view="openbill_Balance.list" title="msg://com.dstu.openbill.view.balance/balanceListView.title"/>
+        <item view="openbill_Contract.list" title="msg://com.dstu.openbill.view.contract/contractListView.title"/>
+        <item view="openbill_Service.list" title="msg://com.dstu.openbill.view.service/serviceListView.title"/>
+        <item view="ContractService.list"
+              title="msg://com.dstu.openbill.view.contractservice/contractServiceListView.title"/>
+        <item view="openbill_Tariff.list" title="msg://com.dstu.openbill.view.tariff/tariffListView.title"/>
     </menu>
 
 </menu-config>
