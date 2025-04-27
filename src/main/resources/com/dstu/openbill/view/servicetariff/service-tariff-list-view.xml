@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://tariffListView.title"
-      focusComponent="tariffsDataGrid">
+      title="msg://serviceTariffListView.title"
+      focusComponent="serviceTariffsDataGrid">
     <data>
-        <collection id="tariffsDc"
-                    class="com.dstu.openbill.entity.Tariff">
-            <fetchPlan extends="_base"/>
-            <loader id="tariffsDl" readOnly="true">
+        <collection id="serviceTariffsDc"
+                    class="com.dstu.openbill.entity.ServiceTariff">
+            <fetchPlan extends="_base">
+                <property name="service" fetchPlan="_base"/>
+                <property name="tariff" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="serviceTariffsDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from openbill_Tariff e]]>
+                    <![CDATA[select e from openbill_ServiceTariff e]]>
                 </query>
             </loader>
         </collection>
@@ -27,19 +30,19 @@
     </actions>
     <layout>
         <genericFilter id="genericFilter"
-                       dataLoader="tariffsDl">
+                       dataLoader="serviceTariffsDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="tariffsDataGrid.create"/>
-            <button id="editButton" action="tariffsDataGrid.edit"/>
-            <button id="removeButton" action="tariffsDataGrid.remove"/>
-            <simplePagination id="pagination" dataLoader="tariffsDl"/>
+            <button id="createButton" action="serviceTariffsDataGrid.create"/>
+            <button id="editButton" action="serviceTariffsDataGrid.edit"/>
+            <button id="removeButton" action="serviceTariffsDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="serviceTariffsDl"/>
         </hbox>
-        <dataGrid id="tariffsDataGrid"
+        <dataGrid id="serviceTariffsDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="tariffsDc"
+                  dataContainer="serviceTariffsDc"
                   columnReorderingAllowed="true">
             <actions>
                 <action id="create" type="list_create"/>
@@ -47,12 +50,10 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="name"/>
-                <column property="description"/>
-                <column property="cost"/>
+                <column property="service"/>
+                <column property="tariff"/>
                 <column property="startDate"/>
                 <column property="endDate"/>
-                <column property="active"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      title="msg://apartmentDetailView.title"
+      title="msg://serviceTariffDetailView.title"
       focusComponent="form">
     <data>
-        <instance id="apartmentDc"
-                  class="com.dstu.openbill.entity.Apartment">
-            <fetchPlan extends="_base"/>
-            <loader id="apartmentDl"/>
+        <instance id="serviceTariffDc"
+                  class="com.dstu.openbill.entity.ServiceTariff">
+            <fetchPlan extends="_base">
+                <property name="service" fetchPlan="_base"/>
+                <property name="tariff" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="serviceTariffDl"/>
         </instance>
     </data>
     <facets>
@@ -17,21 +20,25 @@
         <action id="closeAction" type="detail_close"/>
     </actions>
     <layout>
-        <formLayout id="form" dataContainer="apartmentDc">
+        <formLayout id="form" dataContainer="serviceTariffDc">
             <responsiveSteps>
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <textField id="numberField" property="number"/>
-            <textField id="areaField" property="area"/>
-            <textField id="roomsField" property="rooms"/>
-            <entityPicker id="houseField" property="house">
+            <entityPicker id="serviceField" property="service">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <checkbox id="isOccupiedField" property="isOccupied"/>
+            <entityPicker id="tariffField" property="tariff">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <datePicker id="startDateField" property="startDate"/>
+            <datePicker id="endDateField" property="endDate"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

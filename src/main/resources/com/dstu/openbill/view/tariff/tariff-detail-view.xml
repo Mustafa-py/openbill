@@ -27,6 +27,7 @@
             <textField id="costField" property="cost"/>
             <datePicker id="startDateField" property="startDate"/>
             <datePicker id="endDateField" property="endDate"/>
+            <checkbox id="activeField" property="active"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

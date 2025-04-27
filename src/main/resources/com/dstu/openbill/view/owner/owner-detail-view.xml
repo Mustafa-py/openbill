@@ -6,7 +6,7 @@
         <instance id="ownerDc"
                   class="com.dstu.openbill.entity.Owner">
             <fetchPlan extends="_base">
-                <property name="apartments" fetchPlan="_base"/>
+                <property name="ownerships" fetchPlan="_base"/>
                 <property name="balances" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="ownerDl"/>
@@ -26,7 +26,8 @@
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
             <textField id="fullNameField" property="fullName"/>
-            <textField id="contactsField" property="contacts"/>
+            <textField id="phoneNumberField" property="phoneNumber"/>
+            <textField id="emailField" property="email"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

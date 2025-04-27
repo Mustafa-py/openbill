@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://tariffListView.title"
-      focusComponent="tariffsDataGrid">
+      title="msg://billingListView.title"
+      focusComponent="billingsDataGrid">
     <data>
-        <collection id="tariffsDc"
-                    class="com.dstu.openbill.entity.Tariff">
+        <collection id="billingsDc"
+                    class="com.dstu.openbill.entity.Billing">
             <fetchPlan extends="_base"/>
-            <loader id="tariffsDl" readOnly="true">
+            <loader id="billingsDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from openbill_Tariff e]]>
+                    <![CDATA[select e from openbill_Billing e]]>
                 </query>
             </loader>
         </collection>
@@ -27,19 +27,19 @@
     </actions>
     <layout>
         <genericFilter id="genericFilter"
-                       dataLoader="tariffsDl">
+                       dataLoader="billingsDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="tariffsDataGrid.create"/>
-            <button id="editButton" action="tariffsDataGrid.edit"/>
-            <button id="removeButton" action="tariffsDataGrid.remove"/>
-            <simplePagination id="pagination" dataLoader="tariffsDl"/>
+            <button id="createButton" action="billingsDataGrid.create"/>
+            <button id="editButton" action="billingsDataGrid.edit"/>
+            <button id="removeButton" action="billingsDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="billingsDl"/>
         </hbox>
-        <dataGrid id="tariffsDataGrid"
+        <dataGrid id="billingsDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="tariffsDc"
+                  dataContainer="billingsDc"
                   columnReorderingAllowed="true">
             <actions>
                 <action id="create" type="list_create"/>
@@ -47,12 +47,9 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="name"/>
-                <column property="description"/>
-                <column property="cost"/>
-                <column property="startDate"/>
-                <column property="endDate"/>
-                <column property="active"/>
+                <column property="apartment"/>
+                <column property="amount"/>
+                <column property="billingDate"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

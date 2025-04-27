@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      title="msg://apartmentDetailView.title"
+      title="msg://ownershipDetailView.title"
       focusComponent="form">
     <data>
-        <instance id="apartmentDc"
-                  class="com.dstu.openbill.entity.Apartment">
+        <instance id="ownershipDc"
+                  class="com.dstu.openbill.entity.Ownership">
             <fetchPlan extends="_base"/>
-            <loader id="apartmentDl"/>
+            <loader id="ownershipDl"/>
         </instance>
     </data>
     <facets>
@@ -17,21 +17,25 @@
         <action id="closeAction" type="detail_close"/>
     </actions>
     <layout>
-        <formLayout id="form" dataContainer="apartmentDc">
+        <formLayout id="form" dataContainer="ownershipDc">
             <responsiveSteps>
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <textField id="numberField" property="number"/>
-            <textField id="areaField" property="area"/>
-            <textField id="roomsField" property="rooms"/>
-            <entityPicker id="houseField" property="house">
+            <entityPicker id="ownerField" property="owner">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <checkbox id="isOccupiedField" property="isOccupied"/>
+            <entityPicker id="apartmentField" property="apartment">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <datePicker id="startDateField" property="startDate"/>
+            <datePicker id="endDateField" property="endDate"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

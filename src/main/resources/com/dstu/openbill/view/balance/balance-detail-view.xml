@@ -30,7 +30,7 @@
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <textField id="balanceField" property="balance"/>
+            <textField id="amountField" property="amount"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

@@ -2,28 +2,39 @@ package com.dstu.openbill.entity;
 
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
 @Entity(name = "openbill_House")
+@Table(name = "HOUSE")
 public class House {
 
+    @Column(name = "ID", nullable = false)
     @Id
     @GeneratedValue
     private UUID id;
 
+    @NotNull
     @Column(name = "ADDRESS", nullable = false)
     private String address;
 
+    @NotNull
     @Column(name = "TOTAL_AREA")
     private Double totalArea;
 
     @Column(name = "YEAR_BUILT")
     private Integer yearBuilt;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HOUSING_ASSOCIATION_ID")
     private HousingAssociation housingAssociation;
+
+    @OneToMany(mappedBy = "house")
+    private List<Apartment> apartments;
 
     // ======= Геттеры и сеттеры =======
 
@@ -67,7 +78,15 @@ public class House {
         this.housingAssociation = housingAssociation;
     }
 
-    // ======= toString для отображения =======
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
+    }
+
+    // ======= Отображение =======
 
     @Override
     public String toString() {

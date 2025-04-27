@@ -2,29 +2,41 @@ package com.dstu.openbill.entity;
 
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
 @Entity(name = "openbill_HousingAssociation")
+@Table(name = "HOUSING_ASSOCIATION")
 public class HousingAssociation {
 
+    @Column(name = "ID", nullable = false)
     @Id
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "NAME", nullable = false)
+    @NotNull
+    @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "INN")
+    @NotNull
+    @Column(name = "INN", length = 12)
     private String inn;
 
+    @NotNull
     @Column(name = "ADDRESS")
     private String address;
 
-    @Column(name = "PHONE")
+    @NotNull
+    @Column(name = "PHONE", length = 20)
     private String phone;
 
-    // --- геттеры/сеттеры ---
+    @OneToMany(mappedBy = "housingAssociation")
+    private List<House> houses;
+
+    // --- Геттеры и сеттеры ---
     public UUID getId() {
         return id;
     }
@@ -63,5 +75,18 @@ public class HousingAssociation {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<House> getHouses() {
+        return houses;
+    }
+
+    public void setHouses(List<House> houses) {
+        this.houses = houses;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
