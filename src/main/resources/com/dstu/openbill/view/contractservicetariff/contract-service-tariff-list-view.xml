@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://contractServiceListView.title"
-      focusComponent="contractServicesDataGrid">
+      title="msg://contractServiceTariffListView.title"
+      focusComponent="contractServiceTariffsDataGrid">
     <data>
-        <collection id="contractServicesDc"
-                    class="com.dstu.openbill.entity.ContractService">
-            <fetchPlan extends="_base">
-                <property name="contract" fetchPlan="_base"/>
-                <property name="service" fetchPlan="_base"/>
-            </fetchPlan>
-            <loader id="contractServicesDl" readOnly="true">
+        <collection id="contractServiceTariffsDc"
+                    class="com.dstu.openbill.entity.ContractServiceTariff">
+            <fetchPlan extends="_base"/>
+            <loader id="contractServiceTariffsDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from ContractService e]]>
+                    <![CDATA[select e from openbill_ContractServiceTariff e]]>
                 </query>
             </loader>
         </collection>
@@ -30,19 +27,19 @@
     </actions>
     <layout>
         <genericFilter id="genericFilter"
-                       dataLoader="contractServicesDl">
+                       dataLoader="contractServiceTariffsDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="contractServicesDataGrid.create"/>
-            <button id="editButton" action="contractServicesDataGrid.edit"/>
-            <button id="removeButton" action="contractServicesDataGrid.remove"/>
-            <simplePagination id="pagination" dataLoader="contractServicesDl"/>
+            <button id="createButton" action="contractServiceTariffsDataGrid.create"/>
+            <button id="editButton" action="contractServiceTariffsDataGrid.edit"/>
+            <button id="removeButton" action="contractServiceTariffsDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="contractServiceTariffsDl"/>
         </hbox>
-        <dataGrid id="contractServicesDataGrid"
+        <dataGrid id="contractServiceTariffsDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="contractServicesDc"
+                  dataContainer="contractServiceTariffsDc"
                   columnReorderingAllowed="true">
             <actions>
                 <action id="create" type="list_create"/>
@@ -51,7 +48,7 @@
             </actions>
             <columns resizable="true">
                 <column property="contract"/>
-                <column property="service"/>
+                <column property="serviceTariff"/>
                 <column property="startDate"/>
                 <column property="endDate"/>
             </columns>

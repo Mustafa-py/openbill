@@ -22,6 +22,7 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
+            <textField id="titleField" property="title"/>
             <textField id="numberField" property="number"/>
             <datePicker id="startDateField" property="startDate"/>
             <datePicker id="endDateField" property="endDate"/>

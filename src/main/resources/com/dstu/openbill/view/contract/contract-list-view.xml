@@ -47,6 +47,7 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
+                <column property="title"/>
                 <column property="number"/>
                 <column property="startDate"/>
                 <column property="endDate"/>

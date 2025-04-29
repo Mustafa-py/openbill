@@ -1,30 +1,35 @@
 package com.dstu.openbill.entity;
 
-import io.jmix.core.DeletePolicy;
-import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 
-import jakarta.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
 @Entity(name = "openbill_Contract")
-@Table(name = "CONTRACT")
+@Table(name = "CONTRACT",
+        uniqueConstraints = @UniqueConstraint(
+                name = "IDX_UNQ_CONTRACT_NUMBER",
+                columnNames = {"NUMBER"}
+        ))
 public class Contract {
 
-    @Column(name = "ID", nullable = false)
     @Id
     @GeneratedValue
     private UUID id;
 
     @NotNull
-    @Column(name = "NUMBER", nullable = false)
+    @Column(name = "TITLE", nullable = false, length = 200)
+    private String title;
+
+    @NotNull
+    @Column(name = "NUMBER", nullable = false, length = 50)
     private String number;
 
     @NotNull
@@ -34,17 +39,26 @@ public class Contract {
     @Column(name = "END_DATE")
     private LocalDate endDate;
 
-    @ManyToMany(mappedBy = "contracts")
-    @OnDeleteInverse(DeletePolicy.UNLINK)
-    private List<Service> services;
+    /**
+     * Связь с конкретными ServiceTariff из CONTRACT_SERVICE_TARIFF
+     */
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContractServiceTariff> serviceTariffs;
 
-    // ======= Геттеры / Сеттеры =======
+    // --- getters / setters ---
 
     public UUID getId() {
         return id;
     }
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getNumber() {
@@ -68,35 +82,28 @@ public class Contract {
         this.endDate = endDate;
     }
 
-    public List<Service> getServices() {
-        return services;
+    public List<ContractServiceTariff> getServiceTariffs() {
+        return serviceTariffs;
     }
-    public void setServices(List<Service> services) {
-        this.services = services;
+    public void setServiceTariffs(List<ContractServiceTariff> serviceTariffs) {
+        this.serviceTariffs = serviceTariffs;
     }
 
-    // ======= Бизнес-валидация =======
+    // --- business validation ---
 
-    /**
-     * Проверяет, что endDate не раньше startDate.
-     * Если endDate == null — считается валидным (договор открыт).
-     */
     @AssertTrue(message = "Дата окончания не может быть раньше даты начала")
+    @Transient
     public boolean isValidDates() {
         return endDate == null || !endDate.isBefore(startDate);
     }
 
-    // ======= Красивые имена для UI и логов =======
+    // --- human-friendly display ---
 
     @InstanceName
-    @DependsOnProperties({"number", "startDate"})
+    @DependsOnProperties({"title", "number", "startDate"})
     @Transient
     public String getDisplayName() {
-        return String.format("Договор №%s от %s", number, startDate);
-    }
-
-    @Override
-    public String toString() {
-        return getDisplayName();
+        return String.format("%s (№%s от %s)",
+                title, number, startDate);
     }
 }

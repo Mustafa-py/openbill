@@ -30,7 +30,7 @@
             </entityPicker>
             <datePicker id="paymentDateField" property="paymentDate"/>
             <textField id="amountField" property="amount"/>
-            <textField id="paymentMethodField" property="paymentMethod"/>
+            <select id="paymentMethodField" property="paymentMethod"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

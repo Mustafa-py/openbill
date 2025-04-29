@@ -48,8 +48,10 @@
             </actions>
             <columns resizable="true">
                 <column property="apartment"/>
+                <column property="type"/>
                 <column property="amount"/>
                 <column property="billingDate"/>
+                <column property="comment"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

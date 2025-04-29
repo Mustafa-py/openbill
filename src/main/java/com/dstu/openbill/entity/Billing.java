@@ -14,9 +14,10 @@ import java.util.UUID;
 @JmixEntity
 @Entity(name = "openbill_Billing")
 @Table(name = "BILLING", uniqueConstraints = {
-        @UniqueConstraint(name = "IDX_UNQ_BILLING", columnNames = {
-                "APARTMENT_ID", "TARIFF_ID", "BILLING_DATE"
-        })
+        @UniqueConstraint(
+                name = "IDX_UNQ_BILLING",
+                columnNames = {"APARTMENT_ID", "TARIFF_ID", "BILLING_DATE", "TYPE"}
+        )
 })
 public class Billing {
 
@@ -36,6 +37,11 @@ public class Billing {
     @OnDelete(DeletePolicy.CASCADE)
     private Tariff tariff;
 
+    /** Тип начисления */
+    @Column(name = "TYPE", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BillingType type = BillingType.CHARGE;
+
     /** Сумма начисления */
     @Column(name = "AMOUNT", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
@@ -44,12 +50,15 @@ public class Billing {
     @Column(name = "BILLING_DATE", nullable = false)
     private LocalDate billingDate;
 
-    // --- getters / setters ---
+    /** Комментарий к начислению */
+    @Column(name = "COMMENT")
+    private String comment;
+
+    // --- Getters and setters ---
 
     public UUID getId() {
         return id;
     }
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -57,7 +66,6 @@ public class Billing {
     public Apartment getApartment() {
         return apartment;
     }
-
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
     }
@@ -65,15 +73,20 @@ public class Billing {
     public Tariff getTariff() {
         return tariff;
     }
-
     public void setTariff(Tariff tariff) {
         this.tariff = tariff;
+    }
+
+    public BillingType getType() {
+        return type;
+    }
+    public void setType(BillingType type) {
+        this.type = type;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
-
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
@@ -81,19 +94,27 @@ public class Billing {
     public LocalDate getBillingDate() {
         return billingDate;
     }
-
     public void setBillingDate(LocalDate billingDate) {
         this.billingDate = billingDate;
     }
 
-    // --- Удобное имя для UI и логов ---
+    public String getComment() {
+        return comment;
+    }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    // --- Для отображения в UI и логах ---
+
     @InstanceName
-    @DependsOnProperties({"apartment", "billingDate", "amount"})
+    @DependsOnProperties({"apartment", "billingDate", "amount", "type"})
+    @Transient
     public String getDisplayName() {
-        return String.format("Кв.%s %s: %s",
-                apartment != null ? apartment.getNumber() : "—",
-                billingDate != null ? billingDate : "",
-                amount != null ? amount : "");
+        String apt = apartment != null ? apartment.getNumber() : "—";
+        String date = billingDate != null ? billingDate.toString() : "—";
+        String amt = amount != null ? amount.toString() : "—";
+        return String.format("Кв.%s %s [%s]: %s ₽", apt, date, type, amt);
     }
 
     @Override

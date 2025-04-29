@@ -15,9 +15,9 @@ import java.util.UUID;
 @Table(name = "PAYMENT")
 public class Payment {
 
-    @Column(name = "ID", nullable = false)
     @Id
     @GeneratedValue
+    @Column(name = "ID", nullable = false)
     private UUID id;
 
     @NotNull
@@ -28,19 +28,20 @@ public class Payment {
     @Column(name = "PAYMENT_DATE", nullable = false)
     private LocalDate paymentDate;
 
-    @Column(name = "AMOUNT", nullable = false)
+    @Column(name = "AMOUNT", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
 
+    /** Способ оплаты как enum → dropdown в UI */
     @NotNull
-    @Column(name = "PAYMENT_METHOD")
-    private String paymentMethod;
+    @Column(name = "PAYMENT_METHOD", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
     // ======= Геттеры и сеттеры =======
 
     public UUID getId() {
         return id;
     }
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -48,7 +49,6 @@ public class Payment {
     public Owner getOwner() {
         return owner;
     }
-
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
@@ -56,7 +56,6 @@ public class Payment {
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
-
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
@@ -64,27 +63,27 @@ public class Payment {
     public BigDecimal getAmount() {
         return amount;
     }
-
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
-
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
     // ======= Отображение записи =======
 
     @InstanceName
-    @DependsOnProperties({"owner", "paymentDate", "amount"})
+    @DependsOnProperties({"owner", "paymentDate", "amount", "paymentMethod"})
+    @Transient
     public String getDisplayName() {
-        return String.format("%s: %s₽ (%s)",
-                owner != null ? owner.getFullName() : "—",
-                amount != null ? amount : "—",
-                paymentDate != null ? paymentDate : "—");
+        String name = owner != null ? owner.getFullName() : "—";
+        String date = paymentDate != null ? paymentDate.toString() : "—";
+        String amt  = amount != null ? amount.toString() : "—";
+        String pm   = paymentMethod != null ? paymentMethod.name() : "—";
+        return String.format("%s: %s₽, %s [%s]", name, amt, date, pm);
     }
 }
