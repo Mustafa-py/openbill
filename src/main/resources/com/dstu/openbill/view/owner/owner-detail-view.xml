@@ -10,6 +10,7 @@
                 <property name="balances" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="ownerDl"/>
+            <collection id="ownershipsDc" property="ownerships"/>
         </instance>
     </data>
     <facets>
@@ -29,6 +30,33 @@
             <textField id="phoneNumberField" property="phoneNumber"/>
             <textField id="emailField" property="email"/>
         </formLayout>
+        <h4 text="msg://com.dstu.openbill.entity/Owner.ownerships"/>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button action="ownershipsDataGrid.create"/>
+            <button action="ownershipsDataGrid.edit"/>
+            <button action="ownershipsDataGrid.remove"/>
+        </hbox>
+        <dataGrid id="ownershipsDataGrid" dataContainer="ownershipsDc" width="100%" minHeight="20em">
+            <actions>
+                <action id="create" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="edit" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="owner"/>
+                <column property="apartment"/>
+                <column property="startDate"/>
+                <column property="endDate"/>
+            </columns>
+        </dataGrid>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>
             <button id="closeButton" action="closeAction"/>

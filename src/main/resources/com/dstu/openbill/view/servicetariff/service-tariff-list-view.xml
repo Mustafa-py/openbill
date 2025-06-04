@@ -6,10 +6,7 @@
     <data>
         <collection id="serviceTariffsDc"
                     class="com.dstu.openbill.entity.ServiceTariff">
-            <fetchPlan extends="_base">
-                <property name="service" fetchPlan="_base"/>
-                <property name="tariff" fetchPlan="_base"/>
-            </fetchPlan>
+            <fetchPlan extends="_base"/>
             <loader id="serviceTariffsDl" readOnly="true">
                 <query>
                     <![CDATA[select e from openbill_ServiceTariff e]]>
@@ -50,10 +47,8 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="service"/>
                 <column property="tariff"/>
-                <column property="startDate"/>
-                <column property="endDate"/>
+                <column property="service"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

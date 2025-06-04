@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="openbill">
+        <createTable tableName="APARTMENT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_APARTMENT"/>
+            </column>
+            <column name="NUMBER" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AREA" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ROOMS" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOUSE_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_OCCUPIED" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="openbill">
+        <createTable tableName="BALANCE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_BALANCE"/>
+            </column>
+            <column name="OWNER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="openbill">
+        <createTable tableName="BILLING">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_BILLING"/>
+            </column>
+            <column name="CONTRACT_SERVICE_TARIFF_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BILLING_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COMMENT" type="VARCHAR(1000)"/>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="openbill">
+        <createTable tableName="CONTRACT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTRACT"/>
+            </column>
+            <column name="TITLE" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NUMBER" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE"/>
+            <column name="OWNER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="openbill">
+        <createTable tableName="CONTRACT_SERVICE">
+            <column name="CONTRACT_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTRACT_SERVICE"/>
+            </column>
+            <column name="SERVICE_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTRACT_SERVICE"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="openbill">
+        <createTable tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTRACT_SERVICE_TARIFF"/>
+            </column>
+            <column name="CONTRACT_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SERVICE_TARIFF_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE"/>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="openbill">
+        <createTable tableName="HOUSE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_HOUSE"/>
+            </column>
+            <column name="ADDRESS" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TOTAL_AREA" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="YEAR_BUILT" type="INT"/>
+            <column name="HOUSING_ASSOCIATION_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="8" author="openbill">
+        <createTable tableName="HOUSING_ASSOCIATION">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_HOUSING_ASSOCIATION"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="INN" type="VARCHAR(12)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDRESS" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PHONE" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="9" author="openbill">
+        <createTable tableName="OWNER">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OWNER"/>
+            </column>
+            <column name="FULL_NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PHONE_NUMBER" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="10" author="openbill">
+        <createTable tableName="OWNERSHIP">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OWNERSHIP"/>
+            </column>
+            <column name="OWNER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="APARTMENT_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE"/>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="11" author="openbill">
+        <createTable tableName="PAYMENT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PAYMENT"/>
+            </column>
+            <column name="OWNER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PAYMENT_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PAYMENT_METHOD" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="12" author="openbill">
+        <createTable tableName="SERVICE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SERVICE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(2000)"/>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACTIVE" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="13" author="openbill">
+        <createTable tableName="SERVICE_TARIFF">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SERVICE_TARIFF"/>
+            </column>
+            <column name="TARIFF_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SERVICE_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="14" author="openbill">
+        <createTable tableName="TARIFF">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TARIFF"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(2000)"/>
+            <column name="TARIFF_TYPE" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COST" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACTIVE" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="15" author="openbill">
+        <addUniqueConstraint columnNames="NUMBER, HOUSE_ID" constraintName="IDX_UNQ_APARTMENT_NUMBER_HOUSE"
+                             tableName="APARTMENT"/>
+    </changeSet>
+    <changeSet id="16" author="openbill">
+        <addUniqueConstraint columnNames="NUMBER" constraintName="IDX_UNQ_CONTRACT_NUMBER" tableName="CONTRACT"/>
+    </changeSet>
+    <changeSet id="17" author="openbill">
+        <createIndex indexName="IDX_BILLING_BILLING_DATE" tableName="BILLING">
+            <column name="BILLING_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="18" author="openbill">
+        <createIndex indexName="IDX_BILLING_CONTRACT_SERVICE_TARIFF" tableName="BILLING">
+            <column name="CONTRACT_SERVICE_TARIFF_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_SERVICE_TARIFF_ID" baseTableName="BILLING"
+                                 constraintName="FK_BILLING_ON_CONTRACT_SERVICE_TARIFF" referencedColumnNames="ID"
+                                 referencedTableName="CONTRACT_SERVICE_TARIFF"/>
+    </changeSet>
+    <changeSet id="19" author="openbill">
+        <createIndex indexName="IDX_CONTRACT_END_DATE" tableName="CONTRACT">
+            <column name="END_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="20" author="openbill">
+        <createIndex indexName="IDX_CONTRACT_OWNER" tableName="CONTRACT">
+            <column name="OWNER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="CONTRACT"
+                                 constraintName="FK_CONTRACT_ON_OWNER" referencedColumnNames="ID"
+                                 referencedTableName="OWNER"/>
+    </changeSet>
+    <changeSet id="21" author="openbill">
+        <createIndex indexName="IDX_CONTRACT_START_DATE" tableName="CONTRACT">
+            <column name="START_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="22" author="openbill">
+        <createIndex indexName="IDX_CST_CONTRACT" tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="CONTRACT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="CONTRACT_SERVICE_TARIFF"
+                                 constraintName="FK_CONTRACT_SERVICE_TARIFF_ON_CONTRACT" referencedColumnNames="ID"
+                                 referencedTableName="CONTRACT"/>
+    </changeSet>
+    <changeSet id="23" author="openbill">
+        <createIndex indexName="IDX_CST_END_DATE" tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="END_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="24" author="openbill">
+        <createIndex indexName="IDX_CST_SERVICE_TARIFF" tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="SERVICE_TARIFF_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SERVICE_TARIFF_ID" baseTableName="CONTRACT_SERVICE_TARIFF"
+                                 constraintName="FK_CONTRACT_SERVICE_TARIFF_ON_SERVICE_TARIFF"
+                                 referencedColumnNames="ID" referencedTableName="SERVICE_TARIFF"/>
+    </changeSet>
+    <changeSet id="25" author="openbill">
+        <createIndex indexName="IDX_CST_START_DATE" tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="START_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="26" author="openbill">
+        <createIndex indexName="IDX_HOUSE_ADDRESS" tableName="HOUSE">
+            <column name="ADDRESS"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="27" author="openbill">
+        <createIndex indexName="IDX_HOUSE_ASSOCIATION" tableName="HOUSE">
+            <column name="HOUSING_ASSOCIATION_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="HOUSING_ASSOCIATION_ID" baseTableName="HOUSE"
+                                 constraintName="FK_HOUSE_ON_HOUSING_ASSOCIATION" referencedColumnNames="ID"
+                                 referencedTableName="HOUSING_ASSOCIATION"/>
+    </changeSet>
+    <changeSet id="28" author="openbill">
+        <createIndex indexName="IDX_HOUSING_ASSOCIATION_INN" tableName="HOUSING_ASSOCIATION">
+            <column name="INN"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="29" author="openbill">
+        <createIndex indexName="IDX_HOUSING_ASSOCIATION_NAME" tableName="HOUSING_ASSOCIATION">
+            <column name="NAME"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="30" author="openbill">
+        <createIndex indexName="IDX_OWNERSHIP_APARTMENT" tableName="OWNERSHIP">
+            <column name="APARTMENT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="APARTMENT_ID" baseTableName="OWNERSHIP"
+                                 constraintName="FK_OWNERSHIP_ON_APARTMENT" referencedColumnNames="ID"
+                                 referencedTableName="APARTMENT"/>
+    </changeSet>
+    <changeSet id="31" author="openbill">
+        <createIndex indexName="IDX_OWNERSHIP_COMPOSITE" tableName="OWNERSHIP">
+            <column name="APARTMENT_ID"/>
+            <column name="START_DATE"/>
+            <column name="END_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="32" author="openbill">
+        <createIndex indexName="IDX_OWNERSHIP_END_DATE" tableName="OWNERSHIP">
+            <column name="END_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="33" author="openbill">
+        <createIndex indexName="IDX_OWNERSHIP_OWNER" tableName="OWNERSHIP">
+            <column name="OWNER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="OWNERSHIP"
+                                 constraintName="FK_OWNERSHIP_ON_OWNER" referencedColumnNames="ID"
+                                 referencedTableName="OWNER"/>
+    </changeSet>
+    <changeSet id="34" author="openbill">
+        <createIndex indexName="IDX_OWNERSHIP_START_DATE" tableName="OWNERSHIP">
+            <column name="START_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="35" author="openbill">
+        <createIndex indexName="IDX_OWNER_EMAIL" tableName="OWNER">
+            <column name="EMAIL"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="36" author="openbill">
+        <createIndex indexName="IDX_OWNER_FULL_NAME" tableName="OWNER">
+            <column name="FULL_NAME"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="37" author="openbill">
+        <createIndex indexName="IDX_OWNER_PHONE" tableName="OWNER">
+            <column name="PHONE_NUMBER"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="38" author="openbill">
+        <createIndex indexName="IDX_PAYMENT_DATE" tableName="PAYMENT">
+            <column name="PAYMENT_DATE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="39" author="openbill">
+        <createIndex indexName="IDX_PAYMENT_METHOD" tableName="PAYMENT">
+            <column name="PAYMENT_METHOD"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="40" author="openbill">
+        <createIndex indexName="IDX_PAYMENT_OWNER" tableName="PAYMENT">
+            <column name="OWNER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="PAYMENT" constraintName="FK_PAYMENT_ON_OWNER"
+                                 referencedColumnNames="ID" referencedTableName="OWNER"/>
+    </changeSet>
+    <changeSet id="41" author="openbill">
+        <createIndex indexName="IDX_SERVICE_TARIFF_SERVICE" tableName="SERVICE_TARIFF">
+            <column name="SERVICE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SERVICE_ID" baseTableName="SERVICE_TARIFF"
+                                 constraintName="FK_SERVICE_TARIFF_ON_SERVICE" referencedColumnNames="ID"
+                                 referencedTableName="SERVICE"/>
+    </changeSet>
+    <changeSet id="42" author="openbill">
+        <createIndex indexName="IDX_SERVICE_TARIFF_TARIFF" tableName="SERVICE_TARIFF">
+            <column name="TARIFF_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="TARIFF_ID" baseTableName="SERVICE_TARIFF"
+                                 constraintName="FK_SERVICE_TARIFF_ON_TARIFF" referencedColumnNames="ID"
+                                 referencedTableName="TARIFF"/>
+    </changeSet>
+    <changeSet id="43" author="openbill">
+        <createIndex indexName="IDX_SERVICE_TARIFF_UNIQUE" tableName="SERVICE_TARIFF" unique="true">
+            <column name="TARIFF_ID"/>
+            <column name="SERVICE_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="44" author="openbill">
+        <createIndex indexName="IDX_UNQ_BILLING" tableName="BILLING" unique="true">
+            <column name="CONTRACT_SERVICE_TARIFF_ID"/>
+            <column name="BILLING_DATE"/>
+            <column name="TYPE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="45" author="openbill">
+        <createIndex indexName="IDX_UNQ_CST_CONTRACT_ST" tableName="CONTRACT_SERVICE_TARIFF" unique="true">
+            <column name="CONTRACT_ID"/>
+            <column name="SERVICE_TARIFF_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="46" author="openbill">
+        <addForeignKeyConstraint baseColumnNames="HOUSE_ID" baseTableName="APARTMENT"
+                                 constraintName="FK_APARTMENT_ON_HOUSE" referencedColumnNames="ID"
+                                 referencedTableName="HOUSE"/>
+    </changeSet>
+    <changeSet id="47" author="openbill">
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="BALANCE" constraintName="FK_BALANCE_ON_OWNER"
+                                 referencedColumnNames="ID" referencedTableName="OWNER"/>
+    </changeSet>
+    <changeSet id="48" author="openbill">
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="CONTRACT_SERVICE"
+                                 constraintName="FK_CONSER_ON_CONTRACT" referencedColumnNames="ID"
+                                 referencedTableName="CONTRACT"/>
+    </changeSet>
+    <changeSet id="49" author="openbill">
+        <addForeignKeyConstraint baseColumnNames="SERVICE_ID" baseTableName="CONTRACT_SERVICE"
+                                 constraintName="FK_CONSER_ON_SERVICE" referencedColumnNames="ID"
+                                 referencedTableName="SERVICE"/>
+    </changeSet>
+</databaseChangeLog>

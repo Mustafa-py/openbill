@@ -6,7 +6,7 @@
         <instance id="houseDc"
                   class="com.dstu.openbill.entity.House">
             <fetchPlan extends="_base">
-                <property name="housingAssociation" fetchPlan="_base"/>
+                <property name="apartments" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="houseDl"/>
         </instance>

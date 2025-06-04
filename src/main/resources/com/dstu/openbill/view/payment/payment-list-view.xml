@@ -3,7 +3,6 @@
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
       title="msg://paymentListView.title"
       focusComponent="paymentsDataGrid">
-
     <data>
         <collection id="paymentsDc"
                     class="com.dstu.openbill.entity.Payment">
@@ -15,20 +14,28 @@
             </loader>
         </collection>
     </data>
-
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
     <layout>
         <genericFilter id="genericFilter"
                        dataLoader="paymentsDl">
             <properties include=".*"/>
         </genericFilter>
-
         <hbox id="buttonsPanel" classNames="buttons-panel">
             <button id="createButton" action="paymentsDataGrid.create"/>
             <button id="editButton" action="paymentsDataGrid.edit"/>
             <button id="removeButton" action="paymentsDataGrid.remove"/>
             <simplePagination id="pagination" dataLoader="paymentsDl"/>
         </hbox>
-
         <dataGrid id="paymentsDataGrid"
                   width="100%"
                   minHeight="20em"
@@ -46,23 +53,9 @@
                 <column property="paymentMethod"/>
             </columns>
         </dataGrid>
-
         <hbox id="lookupActions" visible="false">
             <button id="selectButton" action="selectAction"/>
             <button id="discardButton" action="discardAction"/>
         </hbox>
     </layout>
-
-    <facets>
-        <dataLoadCoordinator auto="true"/>
-        <urlQueryParameters>
-            <genericFilter component="genericFilter"/>
-            <pagination component="pagination"/>
-        </urlQueryParameters>
-    </facets>
-
-    <actions>
-        <action id="selectAction" type="lookup_select"/>
-        <action id="discardAction" type="lookup_discard"/>
-    </actions>
 </view>

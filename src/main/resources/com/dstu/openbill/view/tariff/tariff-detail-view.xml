@@ -24,6 +24,7 @@
             </responsiveSteps>
             <textField id="nameField" property="name"/>
             <textField id="descriptionField" property="description"/>
+            <select id="tariffTypeField" property="tariffType"/>
             <textField id="costField" property="cost"/>
             <datePicker id="startDateField" property="startDate"/>
             <datePicker id="endDateField" property="endDate"/>

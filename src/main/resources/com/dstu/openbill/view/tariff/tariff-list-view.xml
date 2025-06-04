@@ -49,6 +49,7 @@
             <columns resizable="true">
                 <column property="name"/>
                 <column property="description"/>
+                <column property="tariffType"/>
                 <column property="cost"/>
                 <column property="startDate"/>
                 <column property="endDate"/>

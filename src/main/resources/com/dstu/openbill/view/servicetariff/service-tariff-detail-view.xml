@@ -5,10 +5,7 @@
     <data>
         <instance id="serviceTariffDc"
                   class="com.dstu.openbill.entity.ServiceTariff">
-            <fetchPlan extends="_base">
-                <property name="service" fetchPlan="_base"/>
-                <property name="tariff" fetchPlan="_base"/>
-            </fetchPlan>
+            <fetchPlan extends="_base"/>
             <loader id="serviceTariffDl"/>
         </instance>
     </data>
@@ -25,20 +22,18 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <entityPicker id="serviceField" property="service">
-                <actions>
-                    <action id="entityLookup" type="entity_lookup"/>
-                    <action id="entityClear" type="entity_clear"/>
-                </actions>
-            </entityPicker>
             <entityPicker id="tariffField" property="tariff">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <datePicker id="startDateField" property="startDate"/>
-            <datePicker id="endDateField" property="endDate"/>
+            <entityPicker id="serviceField" property="service">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

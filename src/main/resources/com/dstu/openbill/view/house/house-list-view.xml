@@ -6,9 +6,7 @@
     <data>
         <collection id="housesDc"
                     class="com.dstu.openbill.entity.House">
-            <fetchPlan extends="_base">
-                <property name="housingAssociation" fetchPlan="_base"/>
-            </fetchPlan>
+            <fetchPlan extends="_base"/>
             <loader id="housesDl" readOnly="true">
                 <query>
                     <![CDATA[select e from openbill_House e]]>
