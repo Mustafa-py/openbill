@@ -1,29 +1,30 @@
 package com.dstu.openbill.entity;
 
-import io.jmix.core.DeletePolicy;
-import io.jmix.core.entity.annotation.OnDelete;
-import io.jmix.core.metamodel.annotation.Composition;
+import io.jmix.core.annotation.DeletedBy;
+import io.jmix.core.annotation.DeletedDate;
+import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @JmixEntity
 @Entity(name = "openbill_Contract")
 @Table(name = "CONTRACT", indexes = {
         @Index(name = "IDX_CONTRACT_OWNER", columnList = "OWNER_ID"),
         @Index(name = "IDX_CONTRACT_START_DATE", columnList = "START_DATE"),
-        @Index(name = "IDX_CONTRACT_END_DATE", columnList = "END_DATE")
+        @Index(name = "IDX_CONTRACT_END_DATE", columnList = "END_DATE"),
+        @Index(name = "IDX_CONTRACT_NUMBER", columnList = "NUMBER", unique = true) // Улучшенный уникальный индекс
 }, uniqueConstraints = {
         @UniqueConstraint(name = "IDX_UNQ_CONTRACT_NUMBER", columnNames = {"NUMBER"})
 })
@@ -32,18 +33,18 @@ public class Contract {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @Id
-    @GeneratedValue
     @Column(name = "ID", nullable = false)
+    @JmixGeneratedValue
     private UUID id;
 
-    @NotNull(message = "Название договора обязательно")
+    @NotBlank(message = "Название договора обязательно")
     @Size(min = 1, max = 200, message = "Название договора должно содержать от 1 до 200 символов")
     @Column(name = "TITLE", nullable = false, length = 200)
     private String title;
 
-    @NotNull(message = "Номер договора обязателен")
+    @NotBlank(message = "Номер договора обязателен")
     @Size(min = 1, max = 50, message = "Номер договора должен содержать от 1 до 50 символов")
-    @Column(name = "NUMBER", nullable = false, length = 50)
+    @Column(name = "NUMBER", nullable = false, length = 50, unique = true)
     private String number;
 
     @NotNull(message = "Дата начала действия договора обязательна")
@@ -60,12 +61,42 @@ public class Contract {
             foreignKey = @ForeignKey(name = "FK_CONTRACT_OWNER"))
     private Owner owner;
 
-    @Composition
-    @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ContractServiceTariff> serviceTariffs = new ArrayList<>();
+    // --- Аудит ---
+    @CreatedBy
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 
-    // Геттеры и сеттеры
+    @CreatedDate
+    @Column(name = "CREATED_DATE")
+    private LocalDateTime createdDate;
+
+    @LastModifiedBy
+    @Column(name = "LAST_MODIFIED_BY")
+    private String lastModifiedBy;
+
+    @LastModifiedDate
+    @Column(name = "LAST_MODIFIED_DATE")
+    private LocalDateTime lastModifiedDate;
+
+    @DeletedBy
+    @Column(name = "DELETED_BY")
+    private String deletedBy;
+
+    @DeletedDate
+    @Column(name = "DELETED_DATE")
+    private LocalDateTime deletedDate;
+
+    // Связь с тарифами
+    @ManyToMany
+    @JoinTable(name = "CONTRACT_TARIFF",
+            joinColumns = @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID",
+                    foreignKey = @ForeignKey(name = "FK_CONTRACT_TARIFF_CONTRACT")),
+            inverseJoinColumns = @JoinColumn(name = "TARIFF_ID", referencedColumnName = "ID",
+                    foreignKey = @ForeignKey(name = "FK_CONTRACT_TARIFF_TARIFF")))
+    private List<Tariff> tariffs = new ArrayList<>();
+
+    // ======= Геттеры и сеттеры =======
+
     public UUID getId() {
         return id;
     }
@@ -79,7 +110,7 @@ public class Contract {
     }
 
     public void setTitle(String title) {
-        this.title = Objects.requireNonNull(title, "Название договора обязательно");
+        this.title = title;
     }
 
     public String getNumber() {
@@ -87,7 +118,7 @@ public class Contract {
     }
 
     public void setNumber(String number) {
-        this.number = Objects.requireNonNull(number, "Номер договора обязателен");
+        this.number = number;
     }
 
     public LocalDate getStartDate() {
@@ -95,7 +126,7 @@ public class Contract {
     }
 
     public void setStartDate(LocalDate startDate) {
-        this.startDate = Objects.requireNonNull(startDate, "Дата начала действия договора обязательна");
+        this.startDate = startDate;
     }
 
     public LocalDate getEndDate() {
@@ -111,46 +142,104 @@ public class Contract {
     }
 
     public void setOwner(Owner owner) {
-        this.owner = Objects.requireNonNull(owner, "Владелец договора обязателен");
+        this.owner = owner;
     }
 
-    public List<ContractServiceTariff> getServiceTariffs() {
-        return serviceTariffs;
+    public List<Tariff> getTariffs() {
+        return tariffs;
     }
 
-    public void setServiceTariffs(List<ContractServiceTariff> serviceTariffs) {
-        this.serviceTariffs = serviceTariffs;
+    public void setTariffs(List<Tariff> tariffs) {
+        this.tariffs = tariffs;
     }
 
-    // Бизнес-логика
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public LocalDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+
+    public String getLastModifiedBy() { return lastModifiedBy; }
+    public void setLastModifiedBy(String lastModifiedBy) { this.lastModifiedBy = lastModifiedBy; }
+
+    public LocalDateTime getLastModifiedDate() { return lastModifiedDate; }
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) { this.lastModifiedDate = lastModifiedDate; }
+
+    public String getDeletedBy() { return deletedBy; }
+    public void setDeletedBy(String deletedBy) { this.deletedBy = deletedBy; }
+
+    public LocalDateTime getDeletedDate() { return deletedDate; }
+    public void setDeletedDate(LocalDateTime deletedDate) { this.deletedDate = deletedDate; }
+
+    // ======= Бизнес-логика =======
+
     @AssertTrue(message = "Дата окончания не может быть раньше даты начала")
     public boolean isValidDates() {
         return endDate == null || !endDate.isBefore(startDate);
     }
 
     @InstanceName
-    @DependsOnProperties({"title", "number", "startDate", "owner"})
+    @DependsOnProperties({"title", "number", "startDate"})
+    @Transient
     public String getDisplayName() {
-        return String.format("%s (№%s от %s) — %s",
-                Objects.toString(title, "—"),
-                Objects.toString(number, "—"),
-                startDate != null ? startDate.format(DATE_FORMATTER) : "—",
-                owner != null ? owner.getFullName() : "—"
+        return String.format("%s (№%s от %s)",
+                Optional.ofNullable(title).orElse("—"),
+                Optional.ofNullable(number).orElse("—"),
+                Optional.ofNullable(startDate)
+                        .map(d -> d.format(DATE_FORMATTER))
+                        .orElse("—")
         );
     }
 
+    @Transient
+    public String getFullInfo() {
+        return getDisplayName() + " — " +
+                Optional.ofNullable(owner)
+                        .map(Owner::getFullName)
+                        .orElse("—");
+    }
+
+    @Transient
+    public boolean isActive() {
+        return isActiveOn(LocalDate.now());
+    }
+
+    @Transient
+    public boolean isActiveOn(LocalDate date) {
+        if (date == null) return false;
+        return !date.isBefore(startDate) &&
+                (endDate == null || !date.isAfter(endDate));
+    }
+
+    // ======= Валидация и жизненный цикл =======
+
     @PrePersist
     @PreUpdate
-    private void validateDates() {
+    private void validate() {
         if (!isValidDates()) {
             throw new IllegalStateException("Дата окончания не может быть раньше даты начала");
         }
     }
 
+    // ======= Управление тарифами =======
+
+    public void addTariff(Tariff tariff) {
+        if (tariff != null && !tariffs.contains(tariff)) {
+            tariffs.add(tariff);
+        }
+    }
+
+    public void removeTariff(Tariff tariff) {
+        tariffs.remove(tariff);
+    }
+
+    // ======= Equals & HashCode =======
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Contract contract)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contract contract = (Contract) o;
         return Objects.equals(number, contract.number);
     }
 
@@ -166,13 +255,6 @@ public class Contract {
                 ", title='" + title + '\'' +
                 ", number='" + number + '\'' +
                 ", startDate=" + startDate +
-                ", owner=" + (owner != null ? owner.getId() : "null") +
                 '}';
-    }
-
-    // Помощник для добавления связи
-    public void addServiceTariff(ContractServiceTariff serviceTariff) {
-        serviceTariff.setContract(this);
-        serviceTariffs.add(serviceTariff);
     }
 }

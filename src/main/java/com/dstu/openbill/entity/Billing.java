@@ -194,10 +194,15 @@ public class Billing {
                 .map(Contract::getNumber)
                 .orElse("—");
 
+        // Теперь вытаскиваем имя услуги напрямую из contractServiceTariff
         String serviceName = Optional.ofNullable(contractServiceTariff)
-                .map(ContractServiceTariff::getServiceTariff)
-                .map(ServiceTariff::getService)
+                .map(ContractServiceTariff::getService)
                 .map(Service::getName)
+                .orElse("—");
+
+        String tariffName = Optional.ofNullable(contractServiceTariff)
+                .map(ContractServiceTariff::getTariff)
+                .map(Tariff::getName)
                 .orElse("—");
 
         String date = Optional.ofNullable(billingDate)
@@ -212,7 +217,8 @@ public class Billing {
                 .map(Enum::toString)
                 .orElse("—");
 
-        return String.format("Дог.%s Усл.%s %s [%s]: %s", contractNum, serviceName, date, typeStr, amt);
+        return String.format("Дог.%s | Усл.%s | Тариф.%s | %s [%s]: %s",
+                contractNum, serviceName, tariffName, date, typeStr, amt);
     }
 
     @Override

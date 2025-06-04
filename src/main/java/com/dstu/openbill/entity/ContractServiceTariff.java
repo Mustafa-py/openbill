@@ -25,14 +25,15 @@ import java.util.UUID;
 @Entity(name = "openbill_ContractServiceTariff")
 @Table(name = "CONTRACT_SERVICE_TARIFF",
         uniqueConstraints = @UniqueConstraint(
-                name = "IDX_UNQ_CST_CONTRACT_ST",
-                columnNames = {"CONTRACT_ID", "SERVICE_TARIFF_ID"}
+                name = "IDX_UNQ_CST_CONTRACT_SERVICE_TARIFF",
+                columnNames = {"CONTRACT_ID", "SERVICE_ID", "TARIFF_ID"}
         ),
         indexes = {
                 @Index(name = "IDX_CST_CONTRACT", columnList = "CONTRACT_ID"),
-                @Index(name = "IDX_CST_SERVICE_TARIFF", columnList = "SERVICE_TARIFF_ID"),
-                @Index(name = "IDX_CST_START_DATE", columnList = "START_DATE"), // Добавлен индекс для даты начала
-                @Index(name = "IDX_CST_END_DATE", columnList = "END_DATE")      // Добавлен индекс для даты окончания
+                @Index(name = "IDX_CST_SERVICE", columnList = "SERVICE_ID"),
+                @Index(name = "IDX_CST_TARIFF", columnList = "TARIFF_ID"),
+                @Index(name = "IDX_CST_START_DATE", columnList = "START_DATE"),
+                @Index(name = "IDX_CST_END_DATE", columnList = "END_DATE")
         }
 )
 public class ContractServiceTariff {
@@ -49,12 +50,19 @@ public class ContractServiceTariff {
     @OnDelete(DeletePolicy.CASCADE)
     private Contract contract;
 
-    /** Конкретная услуга с тарифом */
-    @NotNull(message = "Услуга и тариф обязательны")
+    /** Услуга */
+    @NotNull(message = "Услуга обязательна")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "SERVICE_TARIFF_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_CST_SERVICE_TARIFF"))
+    @JoinColumn(name = "SERVICE_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_CST_SERVICE"))
     @OnDelete(DeletePolicy.CASCADE)
-    private ServiceTariff serviceTariff;
+    private Service service;
+
+    /** Тариф */
+    @NotNull(message = "Тариф обязателен")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "TARIFF_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_CST_TARIFF"))
+    @OnDelete(DeletePolicy.CASCADE)
+    private Tariff tariff;
 
     /** Начало действия в рамках этого договора */
     @NotNull(message = "Дата начала обязательна")
@@ -91,15 +99,17 @@ public class ContractServiceTariff {
     private LocalDateTime deletedDate;
 
     // --- Геттеры и сеттеры ---
-
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
     public Contract getContract() { return contract; }
     public void setContract(Contract contract) { this.contract = contract; }
 
-    public ServiceTariff getServiceTariff() { return serviceTariff; }
-    public void setServiceTariff(ServiceTariff serviceTariff) { this.serviceTariff = serviceTariff; }
+    public Service getService() { return service; }
+    public void setService(Service service) { this.service = service; }
+
+    public Tariff getTariff() { return tariff; }
+    public void setTariff(Tariff tariff) { this.tariff = tariff; }
 
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
@@ -140,22 +150,19 @@ public class ContractServiceTariff {
     }
 
     // --- Для удобного отображения в UI ---
-
     @InstanceName
-    @DependsOnProperties({"contract", "serviceTariff"})
+    @DependsOnProperties({"contract", "service", "tariff"})
     @jakarta.persistence.Transient
     public String getDisplayName() {
         String contractNumber = Optional.ofNullable(contract)
                 .map(Contract::getNumber)
                 .orElse("—");
 
-        String serviceName = Optional.ofNullable(serviceTariff)
-                .map(ServiceTariff::getService)
+        String serviceName = Optional.ofNullable(service)
                 .map(Service::getName)
                 .orElse("—");
 
-        String tariffName = Optional.ofNullable(serviceTariff)
-                .map(ServiceTariff::getTariff)
+        String tariffName = Optional.ofNullable(tariff)
                 .map(Tariff::getName)
                 .orElse("—");
 
@@ -166,17 +173,18 @@ public class ContractServiceTariff {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ContractServiceTariff that)) return false;
-        return Objects.equals(contract, that.contract) &&
-                Objects.equals(serviceTariff, that.serviceTariff);
+        return Objects.equals(contract, that.contract)
+                && Objects.equals(service, that.service)
+                && Objects.equals(tariff, that.tariff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(contract, serviceTariff);
+        return Objects.hash(contract, service, tariff);
     }
 
     @Override
     public String toString() {
-        return getDisplayName(); // Используем отображаемое имя для логирования
+        return getDisplayName();
     }
 }

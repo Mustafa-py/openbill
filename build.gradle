@@ -65,3 +65,13 @@ idea {
 vaadin {
     optimizeBundle = false
 }
+
+processResources {
+    filesMatching('**/liquibase.properties') {
+        filter {
+            it.replace('#  ', '')
+                    .replace('liquibase.dropFirst=false',
+                            'liquibase.dropFirst=true')
+        }
+    }
+}

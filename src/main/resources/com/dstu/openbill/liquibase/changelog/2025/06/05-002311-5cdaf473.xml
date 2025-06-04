@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="openbill">
+        <addColumn tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="SERVICE_ID" type="UUID"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="SERVICE_ID" tableName="CONTRACT_SERVICE_TARIFF"/>
+    </changeSet>
+    <changeSet id="2" author="openbill">
+        <addColumn tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="TARIFF_ID" type="UUID"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="TARIFF_ID" tableName="CONTRACT_SERVICE_TARIFF"/>
+    </changeSet>
+    <changeSet id="3" author="openbill">
+        <createIndex indexName="IDX_CST_SERVICE" tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="SERVICE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SERVICE_ID" baseTableName="CONTRACT_SERVICE_TARIFF"
+                                 constraintName="FK_CONTRACT_SERVICE_TARIFF_ON_SERVICE" referencedColumnNames="ID"
+                                 referencedTableName="SERVICE"/>
+    </changeSet>
+    <changeSet id="4" author="openbill">
+        <createIndex indexName="IDX_CST_TARIFF" tableName="CONTRACT_SERVICE_TARIFF">
+            <column name="TARIFF_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="TARIFF_ID" baseTableName="CONTRACT_SERVICE_TARIFF"
+                                 constraintName="FK_CONTRACT_SERVICE_TARIFF_ON_TARIFF" referencedColumnNames="ID"
+                                 referencedTableName="TARIFF"/>
+    </changeSet>
+    <changeSet id="5" author="openbill">
+        <createIndex indexName="IDX_UNQ_CST_CONTRACT_SERVICE_TARIFF" tableName="CONTRACT_SERVICE_TARIFF" unique="true">
+            <column name="CONTRACT_ID"/>
+            <column name="SERVICE_ID"/>
+            <column name="TARIFF_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="6" author="openbill">
+        <dropColumn columnName="SERVICE_TARIFF_ID" tableName="CONTRACT_SERVICE_TARIFF"/>
+    </changeSet>
+</databaseChangeLog>
