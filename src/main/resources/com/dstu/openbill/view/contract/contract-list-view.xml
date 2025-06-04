@@ -6,7 +6,9 @@
     <data>
         <collection id="contractsDc"
                     class="com.dstu.openbill.entity.Contract">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="owner" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="contractsDl" readOnly="true">
                 <query>
                     <![CDATA[select e from openbill_Contract e]]>

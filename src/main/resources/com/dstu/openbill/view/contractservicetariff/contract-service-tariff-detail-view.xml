@@ -5,7 +5,14 @@
     <data>
         <instance id="contractServiceTariffDc"
                   class="com.dstu.openbill.entity.ContractServiceTariff">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="contract" fetchPlan="_instance_name">
+                    <property name="owner" fetchPlan="_base"/>
+                </property>
+                <property name="tariff" fetchPlan="_instance_name">
+                    <property name="tariffType"/>
+                </property>
+            </fetchPlan>
             <loader id="contractServiceTariffDl"/>
         </instance>
     </data>
@@ -28,7 +35,13 @@
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <entityPicker id="serviceTariffField" property="serviceTariff">
+            <entityPicker id="serviceField" property="service">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <entityPicker id="tariffField" property="tariff">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>

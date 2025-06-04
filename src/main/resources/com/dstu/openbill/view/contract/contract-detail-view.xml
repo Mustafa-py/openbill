@@ -5,7 +5,9 @@
     <data>
         <instance id="contractDc"
                   class="com.dstu.openbill.entity.Contract">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="owner" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="contractDl"/>
         </instance>
     </data>

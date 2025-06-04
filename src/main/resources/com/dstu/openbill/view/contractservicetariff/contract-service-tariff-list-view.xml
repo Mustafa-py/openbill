@@ -6,7 +6,14 @@
     <data>
         <collection id="contractServiceTariffsDc"
                     class="com.dstu.openbill.entity.ContractServiceTariff">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="contract" fetchPlan="_instance_name">
+                    <property name="owner" fetchPlan="_base"/>
+                </property>
+                <property name="tariff" fetchPlan="_instance_name">
+                    <property name="tariffType"/>
+                </property>
+            </fetchPlan>
             <loader id="contractServiceTariffsDl" readOnly="true">
                 <query>
                     <![CDATA[select e from openbill_ContractServiceTariff e]]>
@@ -48,7 +55,8 @@
             </actions>
             <columns resizable="true">
                 <column property="contract"/>
-                <column property="serviceTariff"/>
+                <column property="service"/>
+                <column property="tariff"/>
                 <column property="startDate"/>
                 <column property="endDate"/>
             </columns>
