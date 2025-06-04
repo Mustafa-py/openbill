@@ -51,6 +51,7 @@
                 <column property="number"/>
                 <column property="startDate"/>
                 <column property="endDate"/>
+                <column property="owner"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

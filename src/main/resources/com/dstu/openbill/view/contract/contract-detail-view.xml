@@ -26,6 +26,12 @@
             <textField id="numberField" property="number"/>
             <datePicker id="startDateField" property="startDate"/>
             <datePicker id="endDateField" property="endDate"/>
+            <entityPicker id="ownerField" property="owner">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>

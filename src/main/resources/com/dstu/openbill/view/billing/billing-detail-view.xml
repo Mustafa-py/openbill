@@ -22,37 +22,17 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-
-            <entityPicker id="apartmentField"
-                          property="apartment">
+            <entityPicker id="contractServiceTariffField" property="contractServiceTariff">
                 <actions>
                     <action id="entityLookup" type="entity_lookup"/>
                     <action id="entityClear" type="entity_clear"/>
                 </actions>
             </entityPicker>
-
-            <entityPicker id="tariffField"
-                          property="tariff">
-                <actions>
-                    <action id="entityLookup" type="entity_lookup"/>
-                    <action id="entityClear" type="entity_clear"/>
-                </actions>
-            </entityPicker>
-
-            <comboBox id="typeField"
-                      property="type"/>
-
-            <textField id="amountField"
-                       property="amount"/>
-
-            <datePicker id="billingDateField"
-                        property="billingDate"/>
-
-            <textField id="commentField"
-                       property="comment"
-                       colspan="2"/>
+            <select id="typeField" property="type"/>
+            <textField id="amountField" property="amount"/>
+            <datePicker id="billingDateField" property="billingDate"/>
+            <textField id="commentField" property="comment"/>
         </formLayout>
-
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>
             <button id="closeButton" action="closeAction"/>

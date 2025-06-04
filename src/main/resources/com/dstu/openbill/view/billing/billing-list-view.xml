@@ -47,7 +47,7 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="apartment"/>
+                <column property="contractServiceTariff"/>
                 <column property="type"/>
                 <column property="amount"/>
                 <column property="billingDate"/>

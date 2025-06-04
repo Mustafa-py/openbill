@@ -1,11 +1,14 @@
 package com.dstu.openbill.entity;
 
+import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.DeletePolicy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,41 +19,46 @@ import java.util.UUID;
 @Table(name = "TARIFF")
 public class Tariff {
 
-    @Column(name = "ID", nullable = false)
     @Id
     @GeneratedValue
+    @Column(name = "ID", nullable = false)
     private UUID id;
 
-    @NotNull
-    @Column(name = "NAME", nullable = false)
+    @NotNull(message = "Название тарифа не может быть пустым")
+    @Size(min = 1, max = 255, message = "Название тарифа должно содержать от 1 до 255 символов")
+    @Column(name = "NAME", nullable = false, length = 255)
     private String name;
 
-    @NotNull
-    @Column(name = "DESCRIPTION")
+    @Size(max = 2000, message = "Описание тарифа не должно превышать 2000 символов")
+    @Column(name = "DESCRIPTION", length = 2000)
     private String description;
 
-    @Column(name = "COST", nullable = false, precision = 19, scale = 2)
-    private BigDecimal cost;
+    @NotNull(message = "Тип тарифа не может быть пустым")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TARIFF_TYPE", nullable = false, length = 50)
+    private TariffType tariffType = TariffType.FIXED;
 
-    @NotNull
+    @NotNull(message = "Стоимость тарифа не может быть пустой")
+    @Column(name = "COST", nullable = false, precision = 19, scale = 2)
+    private BigDecimal cost = BigDecimal.ZERO;
+
+    @NotNull(message = "Дата начала действия тарифа не может быть пустой")
     @Column(name = "START_DATE", nullable = false)
     private LocalDate startDate;
 
-    @NotNull
-    @Column(name = "END_DATE")
+    @NotNull(message = "Дата окончания действия тарифа не может быть пустой")
+    @Column(name = "END_DATE", nullable = false)
     private LocalDate endDate;
 
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active = true;
 
-    @ManyToMany
-    @JoinTable(name = "SERVICE_TARIFF",
-            joinColumns = @JoinColumn(name = "TARIFF_ID", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "SERVICE_ID", referencedColumnName = "ID"))
-    private List<Service> services;
+    @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    private List<ServiceTariff> serviceTariffs;
 
-    // ======= Геттеры и сеттеры =======
-
+    // Геттеры и сеттеры
     public UUID getId() {
         return id;
     }
@@ -75,12 +83,20 @@ public class Tariff {
         this.description = description;
     }
 
+    public TariffType getTariffType() {
+        return tariffType;
+    }
+
+    public void setTariffType(TariffType tariffType) {
+        this.tariffType = tariffType;
+    }
+
     public BigDecimal getCost() {
         return cost;
     }
 
     public void setCost(BigDecimal cost) {
-        this.cost = cost;
+        this.cost = cost != null ? cost : BigDecimal.ZERO;
     }
 
     public LocalDate getStartDate() {
@@ -104,26 +120,32 @@ public class Tariff {
     }
 
     public void setActive(Boolean active) {
-        this.active = active;
+        this.active = active != null ? active : true;
     }
 
-    public List<Service> getServices() {
-        return services;
+    public List<ServiceTariff> getServiceTariffs() {
+        return serviceTariffs;
     }
 
-    public void setServices(List<Service> services) {
-        this.services = services;
+    public void setServiceTariffs(List<ServiceTariff> serviceTariffs) {
+        this.serviceTariffs = serviceTariffs;
     }
-
-    // ======= Для красивого отображения =======
 
     @InstanceName
     @DependsOnProperties({"name", "cost", "active"})
     public String getDisplayName() {
         return String.format("%s (%.2f ₽) %s",
                 name != null ? name : "—",
-                cost != null ? cost : 0.00,
+                cost != null ? cost : BigDecimal.ZERO,
                 Boolean.TRUE.equals(active) ? "" : "[Неактивен]"
         );
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validateDates() {
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            throw new IllegalStateException("Дата окончания не может быть раньше даты начала");
+        }
     }
 }

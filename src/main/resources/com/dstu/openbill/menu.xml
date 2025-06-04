@@ -12,13 +12,13 @@
         <item view="openbill_Ownership.list" title="msg://com.dstu.openbill.view.ownership/ownershipListView.title"/>
         <item view="openbill_Tariff.list" title="msg://com.dstu.openbill.view.tariff/tariffListView.title"/>
         <item view="openbill_Service.list" title="msg://com.dstu.openbill.view.service/serviceListView.title"/>
-        <item view="openbill_ServiceTariff.list"
-              title="msg://com.dstu.openbill.view.servicetariff/serviceTariffListView.title"/>
-        <item view="openbill_ContractServiceTariff.list"
-              title="msg://com.dstu.openbill.view.contractservicetariff/contractServiceTariffListView.title"/>
-        <item view="openbill_Billing.list" title="msg://com.dstu.openbill.view.billing/billingListView.title"/>
-        <item view="openbill_Contract.list" title="msg://com.dstu.openbill.view.contract/contractListView.title"/>
+<!--        <item view="openbill_ServiceTariff.list"-->
+<!--              title="msg://com.dstu.openbill.view.servicetariff/serviceTariffListView.title"/>-->
+<!--        <item view="openbill_ContractServiceTariff.list"-->
+<!--              title="msg://com.dstu.openbill.view.contractservicetariff/contractServiceTariffListView.title"/>-->
         <item view="openbill_Payment.list" title="msg://com.dstu.openbill.view.payment/paymentListView.title"/>
+        <item view="openbill_Contract.list" title="msg://com.dstu.openbill.view.contract/contractListView.title"/>
+        <item view="openbill_Billing.list" title="msg://com.dstu.openbill.view.billing/billingListView.title"/>
 
     </menu>
 
