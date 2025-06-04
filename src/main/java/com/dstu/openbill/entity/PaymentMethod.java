@@ -1,16 +1,24 @@
 package com.dstu.openbill.entity;
 
 import io.jmix.core.metamodel.datatype.EnumClass;
-
 import org.springframework.lang.Nullable;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+/**
+ * Способы оплаты платежа.
+ */
 public enum PaymentMethod implements EnumClass<String> {
-    CASH("cash"),
-    CARD("card"),
-    BANK_TRANSFER("bank_transfer"),
-    ONLINE("online");
+    CASH("cash"),           // Наличные
+    CARD("card"),           // Банковская карта
+    BANK_TRANSFER("bank_transfer"), // Банковский перевод
+    ONLINE("online");       // Онлайн-сервисы
 
     private final String id;
+
+    private static final Map<String, PaymentMethod> LOOKUP =
+            Arrays.stream(values()).collect(Collectors.toMap(e -> e.getId().toLowerCase(), e -> e));
 
     PaymentMethod(String id) {
         this.id = id;
@@ -23,11 +31,6 @@ public enum PaymentMethod implements EnumClass<String> {
 
     @Nullable
     public static PaymentMethod fromId(String id) {
-        for (PaymentMethod pm : PaymentMethod.values()) {
-            if (pm.getId().equals(id)) {
-                return pm;
-            }
-        }
-        return null;
+        return id == null ? null : LOOKUP.get(id.toLowerCase());
     }
 }

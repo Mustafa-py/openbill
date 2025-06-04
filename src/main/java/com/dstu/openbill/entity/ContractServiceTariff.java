@@ -1,14 +1,24 @@
 package com.dstu.openbill.entity;
 
-import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.core.metamodel.annotation.InstanceName;
-import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.DeletePolicy;
+import io.jmix.core.annotation.DeletedBy;
+import io.jmix.core.annotation.DeletedDate;
+import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
+import io.jmix.core.metamodel.annotation.InstanceName;
+import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @JmixEntity
@@ -20,14 +30,16 @@ import java.util.UUID;
         ),
         indexes = {
                 @Index(name = "IDX_CST_CONTRACT", columnList = "CONTRACT_ID"),
-                @Index(name = "IDX_CST_SERVICE_TARIFF", columnList = "SERVICE_TARIFF_ID")
+                @Index(name = "IDX_CST_SERVICE_TARIFF", columnList = "SERVICE_TARIFF_ID"),
+                @Index(name = "IDX_CST_START_DATE", columnList = "START_DATE"), // Добавлен индекс для даты начала
+                @Index(name = "IDX_CST_END_DATE", columnList = "END_DATE")      // Добавлен индекс для даты окончания
         }
 )
 public class ContractServiceTariff {
 
     @Id
-    @GeneratedValue
     @Column(name = "ID", nullable = false)
+    @JmixGeneratedValue
     private UUID id;
 
     /** Договор */
@@ -53,6 +65,31 @@ public class ContractServiceTariff {
     @Column(name = "END_DATE")
     private LocalDate endDate;
 
+    // --- Аудит ---
+    @CreatedBy
+    @Column(name = "CREATED_BY")
+    private String createdBy;
+
+    @CreatedDate
+    @Column(name = "CREATED_DATE")
+    private LocalDateTime createdDate;
+
+    @LastModifiedBy
+    @Column(name = "LAST_MODIFIED_BY")
+    private String lastModifiedBy;
+
+    @LastModifiedDate
+    @Column(name = "LAST_MODIFIED_DATE")
+    private LocalDateTime lastModifiedDate;
+
+    @DeletedBy
+    @Column(name = "DELETED_BY")
+    private String deletedBy;
+
+    @DeletedDate
+    @Column(name = "DELETED_DATE")
+    private LocalDateTime deletedDate;
+
     // --- Геттеры и сеттеры ---
 
     public UUID getId() { return id; }
@@ -69,6 +106,24 @@ public class ContractServiceTariff {
 
     public LocalDate getEndDate() { return endDate; }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public LocalDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+
+    public String getLastModifiedBy() { return lastModifiedBy; }
+    public void setLastModifiedBy(String lastModifiedBy) { this.lastModifiedBy = lastModifiedBy; }
+
+    public LocalDateTime getLastModifiedDate() { return lastModifiedDate; }
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) { this.lastModifiedDate = lastModifiedDate; }
+
+    public String getDeletedBy() { return deletedBy; }
+    public void setDeletedBy(String deletedBy) { this.deletedBy = deletedBy; }
+
+    public LocalDateTime getDeletedDate() { return deletedDate; }
+    public void setDeletedDate(LocalDateTime deletedDate) { this.deletedDate = deletedDate; }
 
     // --- Валидация дат ---
     @Transient
@@ -90,13 +145,20 @@ public class ContractServiceTariff {
     @DependsOnProperties({"contract", "serviceTariff"})
     @jakarta.persistence.Transient
     public String getDisplayName() {
-        String serviceName = (serviceTariff != null && serviceTariff.getService() != null)
-                ? serviceTariff.getService().getName()
-                : "—";
-        String tariffName = (serviceTariff != null && serviceTariff.getTariff() != null)
-                ? serviceTariff.getTariff().getName()
-                : "—";
-        String contractNumber = contract != null ? contract.getNumber() : "—";
+        String contractNumber = Optional.ofNullable(contract)
+                .map(Contract::getNumber)
+                .orElse("—");
+
+        String serviceName = Optional.ofNullable(serviceTariff)
+                .map(ServiceTariff::getService)
+                .map(Service::getName)
+                .orElse("—");
+
+        String tariffName = Optional.ofNullable(serviceTariff)
+                .map(ServiceTariff::getTariff)
+                .map(Tariff::getName)
+                .orElse("—");
+
         return String.format("Дог. %s: %s – %s", contractNumber, serviceName, tariffName);
     }
 
@@ -115,10 +177,6 @@ public class ContractServiceTariff {
 
     @Override
     public String toString() {
-        return "ContractServiceTariff{" +
-                "id=" + id +
-                ", contract=" + (contract != null ? contract.getId() : "null") +
-                ", serviceTariff=" + (serviceTariff != null ? serviceTariff.getId() : "null") +
-                '}';
+        return getDisplayName(); // Используем отображаемое имя для логирования
     }
 }
