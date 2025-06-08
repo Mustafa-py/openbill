@@ -54,14 +54,12 @@ public class ContractServiceTariff {
     @NotNull(message = "Услуга обязательна")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "SERVICE_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_CST_SERVICE"))
-    @OnDelete(DeletePolicy.CASCADE)
     private Service service;
 
     /** Тариф */
     @NotNull(message = "Тариф обязателен")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "TARIFF_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_CST_TARIFF"))
-    @OnDelete(DeletePolicy.CASCADE)
     private Tariff tariff;
 
     /** Начало действия в рамках этого договора */
@@ -152,16 +150,14 @@ public class ContractServiceTariff {
     // --- Для удобного отображения в UI ---
     @InstanceName
     @DependsOnProperties({"contract", "service", "tariff"})
-    @jakarta.persistence.Transient
+    @Transient
     public String getDisplayName() {
         String contractNumber = Optional.ofNullable(contract)
                 .map(Contract::getNumber)
                 .orElse("—");
-
         String serviceName = Optional.ofNullable(service)
                 .map(Service::getName)
                 .orElse("—");
-
         String tariffName = Optional.ofNullable(tariff)
                 .map(Tariff::getName)
                 .orElse("—");

@@ -3,21 +3,18 @@
     <menu id="application" title="msg://com.dstu.openbill/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.dstu.openbill.view.user/UserListView.title"/>
         <item view="openbill_HousingAssociation.list"
-              title="msg://com.dstu.openbill.view.housingassociation/housingAssociationListView.title"/>
+        title="msg://com.dstu.openbill.view.housingassociation/housingAssociationListView.title"/>
         <item view="openbill_House.list" title="msg://com.dstu.openbill.view.house/houseListView.title"/>
         <item view="openbill_Apartment.list" title="msg://com.dstu.openbill.view.apartment/apartmentListView.title"/>
         <item view="openbill_Owner.list" title="msg://com.dstu.openbill.view.owner/ownerListView.title"/>
+        <item view="openbill_Balance.list" title="msg://com.dstu.openbill.view.balance/balanceListView.title"/>
         <!--        <item view="openbill_Ownership.list" title="msg://com.dstu.openbill.view.ownership/ownershipListView.title"/>-->
         <item view="openbill_Service.list" title="msg://com.dstu.openbill.view.service/serviceListView.title"/>
         <item view="openbill_Tariff.list" title="msg://com.dstu.openbill.view.tariff/tariffListView.title"/>
+        <!--        <item view="openbill_ContractServiceTariff.list"-->
+        <!--              title="msg://com.dstu.openbill.view.contractservicetariff/contractServiceTariffListView.title"/>-->
         <item view="openbill_Contract.list" title="msg://com.dstu.openbill.view.contract/contractListView.title"/>
-        <item view="openbill_ContractServiceTariff.list"
-              title="msg://com.dstu.openbill.view.contractservicetariff/contractServiceTariffListView.title"/>
-        <item view="openbill_Balance.list" title="msg://com.dstu.openbill.view.balance/balanceListView.title"/>
         <item view="openbill_Billing.list" title="msg://com.dstu.openbill.view.billing/billingListView.title"/>
         <item view="openbill_Payment.list" title="msg://com.dstu.openbill.view.payment/paymentListView.title"/>
-        <!--        <item view="openbill_ServiceTariff.list"-->
-        <!--              title="msg://com.dstu.openbill.view.servicetariff/serviceTariffListView.title"/>-->
-        <!-- НЕ показываем в меню связывающие сущности, доступ к ним только через редакторы -->
     </menu>
 </menu-config>

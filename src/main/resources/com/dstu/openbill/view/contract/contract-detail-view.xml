@@ -7,8 +7,10 @@
                   class="com.dstu.openbill.entity.Contract">
             <fetchPlan extends="_base">
                 <property name="owner" fetchPlan="_base"/>
+                <property name="contractServiceTariffs" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="contractDl"/>
+            <collection id="contractServiceTariffsDc" property="contractServiceTariffs"/>
         </instance>
     </data>
     <facets>
@@ -35,6 +37,35 @@
                 </actions>
             </entityPicker>
         </formLayout>
+        <h4 text="msg://com.dstu.openbill.entity/Contract.contractServiceTariffs"/>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button action="contractServiceTariffsDataGrid.create"/>
+            <button action="contractServiceTariffsDataGrid.edit"/>
+            <button action="contractServiceTariffsDataGrid.remove"/>
+        </hbox>
+        <dataGrid id="contractServiceTariffsDataGrid" dataContainer="contractServiceTariffsDc" width="100%"
+                  minHeight="20em">
+            <actions>
+                <action id="create" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="edit" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="contract"/>
+                <column property="service"/>
+                <column property="tariff"/>
+                <column property="startDate"/>
+                <column property="endDate"/>
+            </columns>
+        </dataGrid>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveAction"/>
             <button id="closeButton" action="closeAction"/>

@@ -5,14 +5,7 @@
     <data>
         <instance id="contractServiceTariffDc"
                   class="com.dstu.openbill.entity.ContractServiceTariff">
-            <fetchPlan extends="_base">
-                <property name="contract" fetchPlan="_instance_name">
-                    <property name="owner" fetchPlan="_base"/>
-                </property>
-                <property name="tariff" fetchPlan="_instance_name">
-                    <property name="tariffType"/>
-                </property>
-            </fetchPlan>
+            <fetchPlan extends="_base"/>
             <loader id="contractServiceTariffDl"/>
         </instance>
     </data>

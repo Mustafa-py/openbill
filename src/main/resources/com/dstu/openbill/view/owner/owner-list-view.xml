@@ -6,7 +6,10 @@
     <data>
         <collection id="ownersDc"
                     class="com.dstu.openbill.entity.Owner">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="ownerships" fetchPlan="_base"/>
+                <property name="balances" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="ownersDl" readOnly="true">
                 <query>
                     <![CDATA[select e from openbill_Owner e]]>

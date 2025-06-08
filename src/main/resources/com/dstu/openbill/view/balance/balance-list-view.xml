@@ -6,7 +6,9 @@
     <data>
         <collection id="balancesDc"
                     class="com.dstu.openbill.entity.Balance">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="owner" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="balancesDl" readOnly="true">
                 <query>
                     <![CDATA[select e from openbill_Balance e]]>
@@ -47,6 +49,7 @@
                 <action id="remove" type="list_remove"/>
             </actions>
             <columns resizable="true">
+                <column property="owner"/>
                 <column property="amount"/>
             </columns>
         </dataGrid>

@@ -9,7 +9,6 @@ import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class Owner {
     @OneToMany(mappedBy = "owner")
     private List<Balance> balances = new ArrayList<>();
 
-    // Геттеры и сеттеры
+    // --- Геттеры и сеттеры ---
     public UUID getId() {
         return id;
     }
@@ -117,13 +116,16 @@ public class Owner {
 
     // Методы для работы с коллекциями
     public void addOwnership(Ownership ownership) {
-        ownership.setOwner(this);
-        ownerships.add(ownership);
+        if (ownership != null && !ownerships.contains(ownership)) {
+            ownership.setOwner(this);
+            ownerships.add(ownership);
+        }
     }
 
     public void removeOwnership(Ownership ownership) {
-        ownerships.remove(ownership);
-        ownership.setOwner(null);
+        if (ownership != null && ownerships.remove(ownership)) {
+            ownership.setOwner(null);
+        }
     }
 
     // equals и hashCode

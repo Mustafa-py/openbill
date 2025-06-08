@@ -1,8 +1,11 @@
 package com.dstu.openbill.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
@@ -24,7 +27,7 @@ import java.util.*;
         @Index(name = "IDX_CONTRACT_OWNER", columnList = "OWNER_ID"),
         @Index(name = "IDX_CONTRACT_START_DATE", columnList = "START_DATE"),
         @Index(name = "IDX_CONTRACT_END_DATE", columnList = "END_DATE"),
-        @Index(name = "IDX_CONTRACT_NUMBER", columnList = "NUMBER", unique = true) // Улучшенный уникальный индекс
+        @Index(name = "IDX_CONTRACT_NUMBER", columnList = "NUMBER", unique = true)
 }, uniqueConstraints = {
         @UniqueConstraint(name = "IDX_UNQ_CONTRACT_NUMBER", columnNames = {"NUMBER"})
 })
@@ -86,72 +89,30 @@ public class Contract {
     @Column(name = "DELETED_DATE")
     private LocalDateTime deletedDate;
 
-    // Связь с тарифами
-    @ManyToMany
-    @JoinTable(name = "CONTRACT_TARIFF",
-            joinColumns = @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID",
-                    foreignKey = @ForeignKey(name = "FK_CONTRACT_TARIFF_CONTRACT")),
-            inverseJoinColumns = @JoinColumn(name = "TARIFF_ID", referencedColumnName = "ID",
-                    foreignKey = @ForeignKey(name = "FK_CONTRACT_TARIFF_TARIFF")))
-    private List<Tariff> tariffs = new ArrayList<>();
+    // --- Связь с ContractServiceTariff ---
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContractServiceTariff> contractServiceTariffs = new ArrayList<>();
 
     // ======= Геттеры и сеттеры =======
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public UUID getId() {
-        return id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public String getNumber() { return number; }
+    public void setNumber(String number) { this.number = number; }
 
-    public String getTitle() {
-        return title;
-    }
+    public LocalDate getStartDate() { return startDate; }
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public LocalDate getEndDate() { return endDate; }
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
-    public List<Tariff> getTariffs() {
-        return tariffs;
-    }
-
-    public void setTariffs(List<Tariff> tariffs) {
-        this.tariffs = tariffs;
-    }
+    public Owner getOwner() { return owner; }
+    public void setOwner(Owner owner) { this.owner = owner; }
 
     public String getCreatedBy() { return createdBy; }
     public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
@@ -171,8 +132,14 @@ public class Contract {
     public LocalDateTime getDeletedDate() { return deletedDate; }
     public void setDeletedDate(LocalDateTime deletedDate) { this.deletedDate = deletedDate; }
 
-    // ======= Бизнес-логика =======
+    public List<ContractServiceTariff> getContractServiceTariffs() {
+        return contractServiceTariffs;
+    }
+    public void setContractServiceTariffs(List<ContractServiceTariff> contractServiceTariffs) {
+        this.contractServiceTariffs = contractServiceTariffs != null ? contractServiceTariffs : new ArrayList<>();
+    }
 
+    // ======= Бизнес-логика =======
     @AssertTrue(message = "Дата окончания не может быть раньше даты начала")
     public boolean isValidDates() {
         return endDate == null || !endDate.isBefore(startDate);
@@ -212,7 +179,6 @@ public class Contract {
     }
 
     // ======= Валидация и жизненный цикл =======
-
     @PrePersist
     @PreUpdate
     private void validate() {
@@ -221,20 +187,21 @@ public class Contract {
         }
     }
 
-    // ======= Управление тарифами =======
-
-    public void addTariff(Tariff tariff) {
-        if (tariff != null && !tariffs.contains(tariff)) {
-            tariffs.add(tariff);
+    // ======= Управление дочерними сущностями (best practice) =======
+    public void addContractServiceTariff(ContractServiceTariff cst) {
+        if (cst != null && !contractServiceTariffs.contains(cst)) {
+            cst.setContract(this);
+            contractServiceTariffs.add(cst);
         }
     }
 
-    public void removeTariff(Tariff tariff) {
-        tariffs.remove(tariff);
+    public void removeContractServiceTariff(ContractServiceTariff cst) {
+        if (cst != null && contractServiceTariffs.remove(cst)) {
+            cst.setContract(null);
+        }
     }
 
     // ======= Equals & HashCode =======
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -8,6 +8,7 @@
                     class="com.dstu.openbill.entity.Contract">
             <fetchPlan extends="_base">
                 <property name="owner" fetchPlan="_base"/>
+                <property name="contractServiceTariffs" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="contractsDl" readOnly="true">
                 <query>
